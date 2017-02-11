@@ -232,6 +232,7 @@ class Renamer(Plugin):
             folder, media_folder, files, extr_files = self.extractFiles(folder = folder, media_folder = media_folder, files = files,
                                                                         cleanup = self.conf('cleanup') and not keep_original)
 
+# DEBUG
         groups = fireEvent('scanner.scan', folder = folder if folder else base_folder,
                            files = files, release_download = release_download, return_ignored = False, single = True) or []
 
@@ -1097,22 +1098,22 @@ Remove it if you want it to be renamed (again, or at least let it try again)
             except:
                 log.error('Failed checking for release in downloader: %s', traceback.format_exc())
 
-            # The following can either be done here, or inside the scanner if we pass it scan_items in one go
-            for release_download in scan_releases:
-                # Ask the renamer to scan the item
-                if release_download['scan']:
-                    if release_download['pause'] and self.conf('file_action') == 'link':
-                        fireEvent('download.pause', release_download = release_download, pause = True, single = True)
-                    self.scan(release_download = release_download)
-                    if release_download['pause'] and self.conf('file_action') == 'link':
-                        fireEvent('download.pause', release_download = release_download, pause = False, single = True)
-                if release_download['process_complete']:
-                    # First make sure the files were successfully processed
-                    if not self.hastagRelease(release_download = release_download, tag = 'failed_rename'):
-                        # Remove the seeding tag if it exists
-                        self.untagRelease(release_download = release_download, tag = 'renamed_already')
-                        # Ask the downloader to process the item
-                        fireEvent('download.process_complete', release_download = release_download, single = True)
+            ## The following can either be done here, or inside the scanner if we pass it scan_items in one go
+            #for release_download in scan_releases:
+            #    # Ask the renamer to scan the item
+            #    if release_download['scan']:
+            #        if release_download['pause'] and self.conf('file_action') == 'link':
+            #            fireEvent('download.pause', release_download = release_download, pause = True, single = True)
+            #        self.scan(release_download = release_download)
+            #        if release_download['pause'] and self.conf('file_action') == 'link':
+            #            fireEvent('download.pause', release_download = release_download, pause = False, single = True)
+            #    if release_download['process_complete']:
+            #        # First make sure the files were successfully processed
+            #        if not self.hastagRelease(release_download = release_download, tag = 'failed_rename'):
+            #            # Remove the seeding tag if it exists
+            #            self.untagRelease(release_download = release_download, tag = 'renamed_already')
+            #            # Ask the downloader to process the item
+            #            fireEvent('download.process_complete', release_download = release_download, single = True)
 
             if fire_scan and (scan_required or len(no_status_support) > 0):
                 self.scan()

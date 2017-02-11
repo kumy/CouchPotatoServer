@@ -221,6 +221,7 @@ class Scanner(Plugin):
             has_ignored = 0
             for file_path in list(group['unsorted_files']):
                 ext = getExt(file_path)
+                log.debug('filepath: %s ; ext: %s' % (file_path, ext))
                 wo_ext = file_path[:-(len(ext) + 1)]
                 found_files = set([i for i in leftovers if wo_ext in i])
                 group['unsorted_files'].extend(found_files)
@@ -231,6 +232,7 @@ class Scanner(Plugin):
             if has_ignored == 0:
                 for file_path in list(group['unsorted_files']):
                     ext = getExt(file_path)
+                    log.debug('filepath2: %s ; ext: %s' % (file_path, ext))
                     has_ignored += 1 if ext in self.ignored_extensions else 0
 
             if has_ignored > 0:
